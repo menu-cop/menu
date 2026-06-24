@@ -134,9 +134,35 @@
 
     <script>
         const WHATSAPP_NUMBER = "573175533322";
+        const CART_STORAGE_KEY = 'lavela_cart';
         let serviceMode = null;
         let cart = [];
         let currentProductId = null;
+
+        function saveCart() {
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        }
+
+        function loadCart() {
+            try {
+                const saved = localStorage.getItem(CART_STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed)) {
+                        cart = parsed;
+                        updateCartUI();
+                    }
+                }
+            } catch (e) {
+                console.warn('No se pudo restaurar el carrito', e);
+            }
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+            localStorage.removeItem(CART_STORAGE_KEY);
+        }
 
         const defaultMenuData = {
             sections: [
@@ -358,6 +384,7 @@
             }
 
             updateCartUI();
+            saveCart();
             const countBadge = document.getElementById('cart-count');
             countBadge.classList.add('scale-150');
             setTimeout(() => countBadge.classList.remove('scale-150'), 200);
@@ -369,6 +396,7 @@
                 cart[itemIndex].qty += delta;
                 if (cart[itemIndex].qty <= 0) cart.splice(itemIndex, 1);
                 updateCartUI();
+                saveCart();
             }
         }
 
@@ -481,7 +509,7 @@
                 if (item.note) orderText += `   ➡️ Nota: ${item.note}\n`;
             });
 
-            orderText += `\n*TOTAL (sin domicilio): ${formatter.format(total)}*\n`;
+            orderText += `\n*TOTAL (⚠️sin domicilio❗): ${formatter.format(total)}*\n`;
             orderText += `⚠️ Estoy de acuerdo y comprendo que el valor puede aumentar por el costo del domicilio.\n\n*Datos de Envío:*\n`;
             orderText += `➡️ Nombre: ${name}\n`;
             orderText += `➡️ Municipio: ${city}\n`;
@@ -497,13 +525,13 @@
 
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`, '_blank');
 
-            cart = [];
-            updateCartUI();
+            clearCart();
             document.getElementById('checkout-form').reset();
             closeCheckout();
         }
 
         window.onload = function() {
+            loadCart();
             showServiceModal();
         };
     </script>
@@ -640,7 +668,7 @@
         </div>
         <div class="p-6 bg-white border-t-2 border-brand-red/20">
             <div class="flex justify-between items-end mb-6 font-serif">
-                <span class="text-lg">TOTAL (sin domicilio)</span>
+                <span class="text-lg">TOTAL (⚠️sin domicilio❗)</span>
                 <span id="cart-total" class="text-2xl font-bold">$0</span>
             </div>
             <button id="btn-checkout" onclick="openCheckout()" class="w-full bg-brand-red text-white font-sans uppercase tracking-widest text-sm font-bold py-4 hover:bg-brand-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
@@ -693,7 +721,7 @@
                     </select>
                 </div>
                 <div class="text-center pt-4">
-                    <p class="font-serif text-sm opacity-70 mb-1">TOTAL (sin domicilio)</p>
+                    <p class="font-serif text-sm opacity-70 mb-1">TOTAL (⚠️sin domicilio❗)</p>
                     <p id="checkout-total-display" class="font-serif text-3xl font-bold"></p>
                 </div>
                 <button type="submit" class="w-full bg-brand-red text-white font-sans uppercase tracking-widest text-sm font-bold py-4 hover:bg-brand-dark transition-colors mt-6 flex justify-center items-center gap-2">

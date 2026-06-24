@@ -278,7 +278,7 @@
             sectionEl.innerHTML = `
                 <div class="flex items-center justify-between mb-4 gap-4">
                     <div class="flex items-center gap-2 flex-1 min-w-0">
-                        <input type="text" class="section-icon-input input-edit w-12 text-center font-serif text-xl" value="🍽️" title="Icono de la sección (emoji)">
+                        <input type="text" class="section-icon-input input-edit w-14 text-center font-serif text-3xl" value="🍽️" title="Icono de la sección (emoji)">
                         <input type="text" class="section-title-input input-edit flex-1 font-sans text-xs tracking-[0.3em] uppercase text-brand-red font-bold" value="NUEVA SECCIÓN">
                     </div>
                     <button onclick="removeSection('${sectionId}')" class="text-brand-red/50 hover:text-brand-red transition-colors flex-shrink-0 p-1" title="Eliminar sección">
@@ -312,7 +312,7 @@
                 sectionEl.innerHTML = `
                     <div class="flex items-center justify-between mb-4 gap-4">
                         <div class="flex items-center gap-2 flex-1 min-w-0">
-                            <input type="text" class="section-icon-input input-edit w-12 text-center font-serif text-xl" value="${section.icon || ''}" title="Icono de la sección (emoji)" placeholder="🍽️">
+                            <input type="text" class="section-icon-input input-edit w-14 text-center font-serif text-3xl" value="${section.icon || ''}" title="Icono de la sección (emoji)" placeholder="🍽️">
                             <input type="text" class="section-title-input input-edit flex-1 font-sans text-xs tracking-[0.3em] uppercase text-brand-red font-bold" value="${section.title}">
                         </div>
                         <button onclick="removeSection('${section.id}')" class="text-brand-red/50 hover:text-brand-red transition-colors flex-shrink-0 p-1" title="Eliminar sección">

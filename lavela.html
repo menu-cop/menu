@@ -516,10 +516,10 @@
                 const subtotal = item.price * item.qty;
                 total += subtotal;
                 orderText += `✅ ${item.qty}x ${item.name} (${formatter.format(subtotal)})\n`;
-                if (item.note) orderText += `   📝Nota: ${item.note}\n`;
+                if (item.note) orderText += `   📝Nota: ${item.note} 🔴\n`;
             });
 
-            orderText += `\n*TOTAL (⚠️sin domicilio❗): ${formatter.format(total)}*\n\n`;
+            orderText += `\n*TOTAL (❌sin domicilio❗): ${formatter.format(total)}*\n\n`;
             orderText += `*Condiciones del domicilio:*\n`;
             orderText += `⚠️ Estoy de acuerdo y comprendo que el valor puede aumentar por el costo del domicilio.\n`;
             orderText += `⚠️ El valor del contenedor icopor aumenta el valor total del pedido.\n\n*Datos de Envío:*\n`;
@@ -680,7 +680,7 @@
         </div>
         <div class="p-6 bg-white border-t-2 border-brand-red/20">
             <div class="flex justify-between items-end mb-6 font-serif">
-                <span class="text-lg">TOTAL (⚠️sin domicilio❗)</span>
+                <span class="text-lg">TOTAL (❌sin domicilio❗)</span>
                 <span id="cart-total" class="text-2xl font-bold">$0</span>
             </div>
             <button id="btn-checkout" onclick="openCheckout()" class="w-full bg-brand-red text-white font-sans uppercase tracking-widest text-sm font-bold py-4 hover:bg-brand-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
@@ -733,7 +733,7 @@
                     </select>
                 </div>
                 <div class="text-center pt-4">
-                    <p class="font-serif text-sm opacity-70 mb-1">TOTAL (⚠️sin domicilio❗)</p>
+                    <p class="font-serif text-sm opacity-70 mb-1">TOTAL (❌sin domicilio❗)</p>
                     <p id="checkout-total-display" class="font-serif text-3xl font-bold"></p>
                 </div>
                 <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 mt-4 flex flex-col gap-2 text-left">

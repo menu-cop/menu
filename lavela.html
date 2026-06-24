@@ -82,6 +82,19 @@
             border-right: 6px solid transparent;
             border-top: 6px solid white;
         }
+        @keyframes cart-shake {
+            0%, 100% { transform: rotate(0deg) translateY(0); }
+            10% { transform: rotate(-8deg) translateY(-2px); }
+            20% { transform: rotate(8deg) translateY(0); }
+            30% { transform: rotate(-6deg) translateY(-1px); }
+            40% { transform: rotate(6deg) translateY(0); }
+            50% { transform: rotate(0deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .cart-shake {
+            animation: cart-shake 2s infinite ease-in-out;
+            transform-origin: top center;
+        }
         body.modo-restaurante .add-to-cart-btn { display: none; }
     </style>
 </head>
@@ -132,9 +145,9 @@
                     title: "ENTRADAS",
                     icon: "🍽️",
                     items: [
-                        { id: 1, name: "CÓCTEL DE CAMARÓN", desc: "Camarón fresco en salsa roja, aguacate, galletas saladas y limón.", price: 18000 },
-                        { id: 2, name: "EMPANADAS DE MARISCOS", desc: "Crocantes empanadas rellenas de mariscos, acompañadas de salsa tártara.", price: 15000 },
-                        { id: 3, name: "CHICHARRÓN DE CALAMAR", desc: "Aros de calamar apanados, servidos con salsa de la casa.", price: 22000 }
+                        { id: 1, name: "CÓCTEL DE CAMARÓN", desc: "Camarón fresco en salsa roja, aguacate, galletas saladas y limón.", price: 18000, hidden: false },
+                        { id: 2, name: "EMPANADAS DE MARISCOS", desc: "Crocantes empanadas rellenas de mariscos, acompañadas de salsa tártara.", price: 15000, hidden: false },
+                        { id: 3, name: "CHICHARRÓN DE CALAMAR", desc: "Aros de calamar apanados, servidos con salsa de la casa.", price: 22000, hidden: false }
                     ]
                 },
                 {
@@ -142,12 +155,12 @@
                     title: "PLATOS PRINCIPALES",
                     icon: "🦐",
                     items: [
-                        { id: 4, name: "CEVICHE DE CAMARÓN", desc: "Limón, cebolla morada, cilantro y salsa de la casa.", price: 28000 },
-                        { id: 5, name: "MOJARRA FRITA", desc: "Acompañada de patacón, arroz con coco y ensalada.", price: 35000 },
-                        { id: 6, name: "CAZUELA DE MARISCOS", desc: "Pulpo, calamar, camarón y mejillones. Incluye arroz.", price: 42000 },
-                        { id: 7, name: "ARROZ A LA MARINERA", desc: "Salteado al wok con mixtura de mariscos y vegetales.", price: 32000 },
-                        { id: 8, name: "LANGOSTINOS AL AJILLO", desc: "Bañados en salsa de ajo y mantequilla, con puré.", price: 55000 },
-                        { id: 9, name: "CÓCTEL DE PULPO", desc: "Salsa roja, aguacate, galletas saladas y limón.", price: 26000 }
+                        { id: 4, name: "CEVICHE DE CAMARÓN", desc: "Limón, cebolla morada, cilantro y salsa de la casa.", price: 28000, hidden: false },
+                        { id: 5, name: "MOJARRA FRITA", desc: "Acompañada de patacón, arroz con coco y ensalada.", price: 35000, hidden: false },
+                        { id: 6, name: "CAZUELA DE MARISCOS", desc: "Pulpo, calamar, camarón y mejillones. Incluye arroz.", price: 42000, hidden: false },
+                        { id: 7, name: "ARROZ A LA MARINERA", desc: "Salteado al wok con mixtura de mariscos y vegetales.", price: 32000, hidden: false },
+                        { id: 8, name: "LANGOSTINOS AL AJILLO", desc: "Bañados en salsa de ajo y mantequilla, con puré.", price: 55000, hidden: false },
+                        { id: 9, name: "CÓCTEL DE PULPO", desc: "Salsa roja, aguacate, galletas saladas y limón.", price: 26000, hidden: false }
                     ]
                 },
                 {
@@ -155,10 +168,10 @@
                     title: "BEBIDAS",
                     icon: "🍹",
                     items: [
-                        { id: 10, name: "LIMONADA DE COCO", desc: "Refrescante limonada con leche de coco.", price: 8000 },
-                        { id: 11, name: "CERVEZA NACIONAL", desc: "Cerveza nacional bien fría.", price: 6000 },
-                        { id: 12, name: "JUGO NATURAL", desc: "Jugo natural en agua o leche.", price: 7000 },
-                        { id: 13, name: "GASEOSA PERSONAL", desc: "Gaseosa personal de 400 ml.", price: 5000 }
+                        { id: 10, name: "LIMONADA DE COCO", desc: "Refrescante limonada con leche de coco.", price: 8000, hidden: false },
+                        { id: 11, name: "CERVEZA NACIONAL", desc: "Cerveza nacional bien fría.", price: 6000, hidden: false },
+                        { id: 12, name: "JUGO NATURAL", desc: "Jugo natural en agua o leche.", price: 7000, hidden: false },
+                        { id: 13, name: "GASEOSA PERSONAL", desc: "Gaseosa personal de 400 ml.", price: 5000, hidden: false }
                     ]
                 }
             ]
@@ -283,6 +296,7 @@
 
                 const itemsContainer = sectionEl.querySelector(`#section-${section.id}`);
                 (section.items || []).forEach(item => {
+                    if (item.hidden) return;
                     const row = document.createElement('div');
                     row.className = "group";
                     row.innerHTML = `
@@ -308,7 +322,7 @@
         function findProduct(id) {
             const data = window.menuData || defaultMenuData;
             for (const section of data.sections) {
-                const found = section.items.find(item => item.id === id);
+                const found = section.items.find(item => item.id === id && !item.hidden);
                 if (found) return found;
             }
             return null;
@@ -364,6 +378,7 @@
             const countBadge = document.getElementById('cart-count');
             const totalDisplay = document.getElementById('cart-total');
             const btnCheckout = document.getElementById('btn-checkout');
+            const cartIcon = document.getElementById('cart-icon');
 
             Array.from(container.children).forEach(child => {
                 if(child.id !== 'empty-cart-msg') child.remove();
@@ -375,9 +390,11 @@
             if (cart.length === 0) {
                 emptyMsg.style.display = 'block';
                 btnCheckout.disabled = true;
+                cartIcon.classList.remove('cart-shake');
             } else {
                 emptyMsg.style.display = 'none';
                 btnCheckout.disabled = false;
+                cartIcon.classList.add('cart-shake');
 
                 cart.forEach(item => {
                     total += item.price * item.qty;
@@ -464,13 +481,19 @@
                 if (item.note) orderText += `   ➡️ Nota: ${item.note}\n`;
             });
 
-            orderText += `\n*Total a pagar: ${formatter.format(total)}*\n`;
-            orderText += `⚠️ *Importante:* El valor del domicilio aún no está incluido. Se cotizará al final según tu ubicación. El total puede aumentar.\n\n*Datos de Envío:*\n`;
+            orderText += `\n*TOTAL (sin domicilio): ${formatter.format(total)}*\n`;
+            orderText += `⚠️ Estoy de acuerdo y comprendo que el valor puede aumentar por el costo del domicilio.\n\n*Datos de Envío:*\n`;
             orderText += `➡️ Nombre: ${name}\n`;
             orderText += `➡️ Municipio: ${city}\n`;
             orderText += `➡️ Dirección: ${address}\n`;
             orderText += `➡️ Barrio: ${hood}\n`;
-            orderText += `➡️ Método: ${payment}\n`;
+            orderText += `➡️ Método de pago: ${payment}\n`;
+
+            if (payment === 'Transferencia') {
+                orderText += `\nQuedo atento al valor del domicilio, el valor total del pedido y la cuenta bancaria para poder transferir. Gracias.`;
+            } else {
+                orderText += `\nQuedo pendiente del valor total.`;
+            }
 
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`, '_blank');
 
@@ -491,12 +514,12 @@
                 <i data-lucide="menu" class="w-7 h-7"></i>
             </button>
             <img src="Logo_la vela.jpg" alt="Logo La Vela" class="h-10 w-10 object-contain rounded-full border border-brand-red/20">
-            <div class="font-serif font-bold text-xl tracking-widest">CEVICHERÍA LA VELA</div>
+            <div class="font-serif font-bold text-xl tracking-widest">LA VELA</div>
         </div>
         <button id="cart-nav-button" onclick="toggleCart()" class="relative flex items-center gap-2 group">
             <span class="font-serif hidden md:block group-hover:underline">VER PEDIDO</span>
             <div class="relative">
-                <i data-lucide="shopping-bag" class="w-6 h-6 text-brand-red"></i>
+                <i id="cart-icon" data-lucide="shopping-bag" class="w-6 h-6 text-brand-red"></i>
                 <span id="cart-count" class="absolute -top-2 -right-2 bg-brand-red text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
             </div>
         </button>
@@ -617,7 +640,7 @@
         </div>
         <div class="p-6 bg-white border-t-2 border-brand-red/20">
             <div class="flex justify-between items-end mb-6 font-serif">
-                <span class="text-lg">TOTAL</span>
+                <span class="text-lg">TOTAL (sin domicilio)</span>
                 <span id="cart-total" class="text-2xl font-bold">$0</span>
             </div>
             <button id="btn-checkout" onclick="openCheckout()" class="w-full bg-brand-red text-white font-sans uppercase tracking-widest text-sm font-bold py-4 hover:bg-brand-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
@@ -634,8 +657,7 @@
             <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-6 flex items-start gap-3">
                 <i data-lucide="alert-triangle" class="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5"></i>
                 <div class="text-sm text-yellow-800">
-                    <p class="font-bold">El valor del domicilio aún no está incluido.</p>
-                    <p>Se cotizará al final según tu ubicación. El total que ves aquí puede aumentar.</p>
+                    <p class="font-bold">Estoy de acuerdo y comprendo que el valor puede aumentar por el costo del domicilio.</p>
                 </div>
             </div>
             <form id="checkout-form" onsubmit="submitOrder(event)" class="space-y-6">
@@ -671,7 +693,7 @@
                     </select>
                 </div>
                 <div class="text-center pt-4">
-                    <p class="font-serif text-sm opacity-70 mb-1">Total a Pagar</p>
+                    <p class="font-serif text-sm opacity-70 mb-1">TOTAL (sin domicilio)</p>
                     <p id="checkout-total-display" class="font-serif text-3xl font-bold"></p>
                 </div>
                 <button type="submit" class="w-full bg-brand-red text-white font-sans uppercase tracking-widest text-sm font-bold py-4 hover:bg-brand-dark transition-colors mt-6 flex justify-center items-center gap-2">

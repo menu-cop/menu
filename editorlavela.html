@@ -149,9 +149,9 @@
                     title: "ENTRADAS",
                     icon: "🍽️",
                     items: [
-                        { id: 1, name: "CÓCTEL DE CAMARÓN", desc: "Camarón fresco en salsa roja, aguacate, galletas saladas y limón.", price: 18000 },
-                        { id: 2, name: "EMPANADAS DE MARISCOS", desc: "Crocantes empanadas rellenas de mariscos, acompañadas de salsa tártara.", price: 15000 },
-                        { id: 3, name: "CHICHARRÓN DE CALAMAR", desc: "Aros de calamar apanados, servidos con salsa de la casa.", price: 22000 }
+                        { id: 1, name: "CÓCTEL DE CAMARÓN", desc: "Camarón fresco en salsa roja, aguacate, galletas saladas y limón.", price: 18000, hidden: false },
+                        { id: 2, name: "EMPANADAS DE MARISCOS", desc: "Crocantes empanadas rellenas de mariscos, acompañadas de salsa tártara.", price: 15000, hidden: false },
+                        { id: 3, name: "CHICHARRÓN DE CALAMAR", desc: "Aros de calamar apanados, servidos con salsa de la casa.", price: 22000, hidden: false }
                     ]
                 },
                 {
@@ -159,12 +159,12 @@
                     title: "PLATOS PRINCIPALES",
                     icon: "🦐",
                     items: [
-                        { id: 4, name: "CEVICHE DE CAMARÓN", desc: "Limón, cebolla morada, cilantro y salsa de la casa.", price: 28000 },
-                        { id: 5, name: "MOJARRA FRITA", desc: "Acompañada de patacón, arroz con coco y ensalada.", price: 35000 },
-                        { id: 6, name: "CAZUELA DE MARISCOS", desc: "Pulpo, calamar, camarón y mejillones. Incluye arroz.", price: 42000 },
-                        { id: 7, name: "ARROZ A LA MARINERA", desc: "Salteado al wok con mixtura de mariscos y vegetales.", price: 32000 },
-                        { id: 8, name: "LANGOSTINOS AL AJILLO", desc: "Bañados en salsa de ajo y mantequilla, con puré.", price: 55000 },
-                        { id: 9, name: "CÓCTEL DE PULPO", desc: "Salsa roja, aguacate, galletas saladas y limón.", price: 26000 }
+                        { id: 4, name: "CEVICHE DE CAMARÓN", desc: "Limón, cebolla morada, cilantro y salsa de la casa.", price: 28000, hidden: false },
+                        { id: 5, name: "MOJARRA FRITA", desc: "Acompañada de patacón, arroz con coco y ensalada.", price: 35000, hidden: false },
+                        { id: 6, name: "CAZUELA DE MARISCOS", desc: "Pulpo, calamar, camarón y mejillones. Incluye arroz.", price: 42000, hidden: false },
+                        { id: 7, name: "ARROZ A LA MARINERA", desc: "Salteado al wok con mixtura de mariscos y vegetales.", price: 32000, hidden: false },
+                        { id: 8, name: "LANGOSTINOS AL AJILLO", desc: "Bañados en salsa de ajo y mantequilla, con puré.", price: 55000, hidden: false },
+                        { id: 9, name: "CÓCTEL DE PULPO", desc: "Salsa roja, aguacate, galletas saladas y limón.", price: 26000, hidden: false }
                     ]
                 },
                 {
@@ -172,10 +172,10 @@
                     title: "BEBIDAS",
                     icon: "🍹",
                     items: [
-                        { id: 10, name: "LIMONADA DE COCO", desc: "Refrescante limonada con leche de coco.", price: 8000 },
-                        { id: 11, name: "CERVEZA NACIONAL", desc: "Cerveza nacional bien fría.", price: 6000 },
-                        { id: 12, name: "JUGO NATURAL", desc: "Jugo natural en agua o leche.", price: 7000 },
-                        { id: 13, name: "GASEOSA PERSONAL", desc: "Gaseosa personal de 400 ml.", price: 5000 }
+                        { id: 10, name: "LIMONADA DE COCO", desc: "Refrescante limonada con leche de coco.", price: 8000, hidden: false },
+                        { id: 11, name: "CERVEZA NACIONAL", desc: "Cerveza nacional bien fría.", price: 6000, hidden: false },
+                        { id: 12, name: "JUGO NATURAL", desc: "Jugo natural en agua o leche.", price: 7000, hidden: false },
+                        { id: 13, name: "GASEOSA PERSONAL", desc: "Gaseosa personal de 400 ml.", price: 5000, hidden: false }
                     ]
                 }
             ]
@@ -211,8 +211,9 @@
                     const name = itemEl.querySelector('.item-name-input').value.trim();
                     const desc = itemEl.querySelector('.item-desc-input').value.trim();
                     const price = parseInt(itemEl.querySelector('.item-price-input').value.replace(/[^0-9]/g, '')) || 0;
+                    const hidden = itemEl.querySelector('.item-hidden-input').checked;
                     if (name) {
-                        items.push({ id, name, desc, price });
+                        items.push({ id, name, desc, price, hidden });
                     }
                 });
                 data.sections.push({ id: sectionId, title: title || 'SECCIÓN', icon, items });
@@ -263,6 +264,12 @@
                     <button onclick="this.closest('.editor-item').remove()" class="text-brand-red/50 hover:text-brand-red transition-colors p-1" title="Eliminar plato">
                         <i data-lucide="trash-2" class="w-5 h-5"></i>
                     </button>
+                </div>
+                <div class="md:col-span-12 flex items-center gap-2 -mt-2">
+                    <label class="flex items-center gap-2 text-xs font-sans uppercase tracking-wider text-brand-red/70 cursor-pointer select-none hover:text-brand-red transition-colors">
+                        <input type="checkbox" class="item-hidden-input w-4 h-4 accent-brand-red">
+                        <span>Ocultar / No disponible</span>
+                    </label>
                 </div>
             `;
             itemsContainer.appendChild(itemEl);
@@ -335,6 +342,12 @@
                                     <button onclick="this.closest('.editor-item').remove()" class="text-brand-red/50 hover:text-brand-red transition-colors p-1" title="Eliminar plato">
                                         <i data-lucide="trash-2" class="w-5 h-5"></i>
                                     </button>
+                                </div>
+                                <div class="md:col-span-12 flex items-center gap-2 -mt-2">
+                                    <label class="flex items-center gap-2 text-xs font-sans uppercase tracking-wider text-brand-red/70 cursor-pointer select-none hover:text-brand-red transition-colors">
+                                        <input type="checkbox" class="item-hidden-input w-4 h-4 accent-brand-red" ${item.hidden ? 'checked' : ''}>
+                                        <span>Ocultar / No disponible</span>
+                                    </label>
                                 </div>
                             </div>
                         `).join('')}

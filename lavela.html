@@ -71,6 +71,17 @@
             border-right: 6px solid transparent;
             border-top: 6px solid white;
         }
+        .help-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid white;
+        }
         body.modo-restaurante .add-to-cart-btn { display: none; }
     </style>
 </head>
@@ -119,6 +130,7 @@
                 {
                     id: "entradas",
                     title: "ENTRADAS",
+                    icon: "🍽️",
                     items: [
                         { id: 1, name: "CÓCTEL DE CAMARÓN", desc: "Camarón fresco en salsa roja, aguacate, galletas saladas y limón.", price: 18000 },
                         { id: 2, name: "EMPANADAS DE MARISCOS", desc: "Crocantes empanadas rellenas de mariscos, acompañadas de salsa tártara.", price: 15000 },
@@ -128,6 +140,7 @@
                 {
                     id: "platos",
                     title: "PLATOS PRINCIPALES",
+                    icon: "🦐",
                     items: [
                         { id: 4, name: "CEVICHE DE CAMARÓN", desc: "Limón, cebolla morada, cilantro y salsa de la casa.", price: 28000 },
                         { id: 5, name: "MOJARRA FRITA", desc: "Acompañada de patacón, arroz con coco y ensalada.", price: 35000 },
@@ -140,6 +153,7 @@
                 {
                     id: "bebidas",
                     title: "BEBIDAS",
+                    icon: "🍹",
                     items: [
                         { id: 10, name: "LIMONADA DE COCO", desc: "Refrescante limonada con leche de coco.", price: 8000 },
                         { id: 11, name: "CERVEZA NACIONAL", desc: "Cerveza nacional bien fría.", price: 6000 },
@@ -187,6 +201,14 @@
             document.getElementById('table-modal').classList.add('hidden');
         }
 
+        function openHelpModal() {
+            document.getElementById('help-modal').classList.remove('hidden');
+        }
+
+        function closeHelpModal() {
+            document.getElementById('help-modal').classList.add('hidden');
+        }
+
         function sendWaiterMessage() {
             const table = document.getElementById('table-number').value.trim();
             if (!table) {
@@ -207,7 +229,10 @@
                 const sectionEl = document.createElement('div');
                 sectionEl.className = "mb-10";
                 sectionEl.innerHTML = `
-                    <h3 class="font-sans text-xs tracking-[0.3em] uppercase text-brand-red/60 mb-6 border-b border-brand-red/20 pb-2">${section.title}</h3>
+                    <h3 class="font-sans text-xs tracking-[0.3em] uppercase text-brand-red/60 mb-6 border-b border-brand-red/20 pb-2 flex items-center gap-2">
+                        <span class="text-2xl">${section.icon || ''}</span>
+                        <span>${section.title}</span>
+                    </h3>
                     <div class="space-y-8" id="section-${section.id}"></div>
                 `;
                 container.appendChild(sectionEl);
@@ -460,6 +485,15 @@
         </button>
     </div>
 
+    <div id="help-float" class="fixed bottom-6 left-6 z-30 flex flex-col items-start gap-2">
+        <div class="help-bubble bg-white text-brand-red text-xs font-bold px-3 py-2 rounded-lg shadow-lg max-w-[180px] text-left">
+            ¿Cómo usar el menú?
+        </div>
+        <button onclick="openHelpModal()" class="bg-brand-red text-white w-12 h-12 rounded-full shadow-lg hover:scale-110 transition-all flex items-center justify-center" title="¿Cómo usar el menú?">
+            <i data-lucide="help" class="w-6 h-6"></i>
+        </button>
+    </div>
+
     <div id="service-modal" class="fixed inset-0 bg-brand-dark/90 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4 fade-in">
         <div class="bg-brand-light w-full max-w-md p-8 border-4 border-double border-brand-red relative text-center">
             <img src="Logo_la vela.jpg" alt="Logo La Vela" class="h-24 w-24 object-contain rounded-full border-2 border-brand-red/20 shadow-sm mx-auto mb-6">
@@ -487,6 +521,24 @@
             <button onclick="sendWaiterMessage()" class="w-full bg-[#25D366] text-white font-sans uppercase tracking-widest text-sm font-bold py-4 hover:bg-green-600 transition-colors flex justify-center items-center gap-2">
                 Llamar mensero
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.955L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="help-modal" class="fixed inset-0 bg-brand-dark/90 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4 fade-in">
+        <div class="bg-brand-light w-full max-w-md p-8 border-4 border-double border-brand-red relative text-left">
+            <button onclick="closeHelpModal()" class="absolute top-4 right-4 text-brand-red hover:scale-110 transition-transform"><i data-lucide="x"></i></button>
+            <h2 class="font-serif text-3xl font-bold text-center mb-2">¿Cómo usar el menú?</h2>
+            <p class="text-center text-sm font-serif italic opacity-70 mb-6 border-b border-brand-red/20 pb-4">Pedir es muy fácil</p>
+            <div class="space-y-4 text-brand-red font-sans text-sm leading-relaxed">
+                <p><strong>1.</strong> Elige si quieres pedir a <strong>domicilio</strong> o estás <strong>en el restaurante</strong>.</p>
+                <p><strong>2.</strong> Toca el botón <strong>+</strong> junto al plato que deseas. Puedes agregar una nota si quieres personalizarlo.</p>
+                <p><strong>3.</strong> Revisa tu pedido en el icono de la bolsa arriba a la derecha.</p>
+                <p><strong>4.</strong> Cuando esté listo, presiona <strong>Procesar Pedido</strong>, llena tus datos y envíalo directamente a WhatsApp.</p>
+                <p class="font-bold text-center mt-4">No tienes que copiar nada. Todo se envía en un solo mensaje.</p>
+            </div>
+            <button onclick="closeHelpModal()" class="w-full mt-8 bg-brand-red text-white font-sans uppercase tracking-widest text-sm font-bold py-4 hover:bg-brand-dark transition-colors">
+                Entendido
             </button>
         </div>
     </div>

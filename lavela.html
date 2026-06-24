@@ -516,12 +516,12 @@
                 const subtotal = item.price * item.qty;
                 total += subtotal;
                 orderText += `✅ ${item.qty}x ${item.name} (${formatter.format(subtotal)})\n`;
-                if (item.note) orderText += `   ➡️ Nota: ${item.note}\n`;
+                if (item.note) orderText += `   📝Nota: ${item.note}\n`;
             });
 
             orderText += `\n*TOTAL (⚠️sin domicilio❗): ${formatter.format(total)}*\n\n`;
             orderText += `*Condiciones del domicilio:*\n`;
-            orderText += `⚠️ Al enviar el pedido a Whatsapp, acepto los términos y condiciones del domicilio.\n`;
+            orderText += `⚠️ Estoy de acuerdo y comprendo que el valor puede aumentar por el costo del domicilio.\n`;
             orderText += `⚠️ El valor del contenedor icopor aumenta el valor total del pedido.\n\n*Datos de Envío:*\n`;
             orderText += `➡️ Nombre: ${name}\n`;
             orderText += `➡️ Municipio: ${city}\n`;
@@ -689,8 +689,8 @@
         </div>
     </div>
 
-    <div id="checkout-modal" class="fixed inset-0 bg-brand-red/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 fade-in">
-        <div class="bg-brand-light w-full max-w-md p-8 border-4 border-double border-brand-red relative">
+    <div id="checkout-modal" class="fixed inset-0 bg-brand-red/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 fade-in overflow-y-auto">
+        <div class="bg-brand-light w-full max-w-md max-h-[90vh] overflow-y-auto p-8 border-4 border-double border-brand-red relative my-auto">
             <button onclick="closeCheckout()" class="absolute top-4 right-4 text-brand-red hover:scale-110 transition-transform"><i data-lucide="x"></i></button>
             <h2 class="font-serif text-3xl font-bold text-center mb-2">Envío & Pago</h2>
             <p class="text-center text-sm font-serif italic opacity-70 mb-4 border-b border-brand-red/20 pb-4">Por favor, completa tus datos</p>
